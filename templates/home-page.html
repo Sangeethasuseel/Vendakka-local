@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
 
@@ -6,8 +7,47 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link rel="stylesheet" href="../static/css/home.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
 </head>
+
+<script>
+
+    function grab(){
+
+        $.ajax({
+            method: 'POST',
+            url: "http://localhost/Vendakka/ven%20new/Vendakka-local/php/catlink.php",
+            dataType: 'json',
+            data: { category: this.id },
+            dataType: 'json',
+            success: function (response) {
+            console.log(data);
+
+            $.map(response, function (post, i) {
+                $('h1').val( post.category );
+            });
+
+            $.map(data, function (post, i) {
+
+                $('#tt').append(
+                    '<div class="card">' +
+                    '<div class="card-image">' +
+                    '<img src=' + post.product_image + ' alt="">' +
+                    '</div>' +
+                    '<div class="card-text">' +
+                    '<span class = "name">' + post.product_name + '</span>' + '<span class="unit">' + post.unit + '</span>' + '<br>' +
+                    '<span class="farm">' + "From " + post.farm_name + " farm" + '</span>' + '<br>' +
+                    '</div>' + '<span class="price">' + "₹ " + post.price + '</span>' +
+                    '<div class="card-add">' +
+                    ' <button class="add-button"   id=' + post.stock_id + '  type="submit"  >' + '<i class="fa fa-cart-plus">' + '</i>' + '</button>' +
+                    '</div>' +
+                    '</div>')
+            });
+        }
+        });
+    }
+</script>
 
 <body>
     <div class="topnav">
@@ -15,13 +55,13 @@
         <form action="../templates/shopping-cart.html">
             <button id="cart-button" type="submit"><i class="fa fa-shopping-cart"></i></button>
         </form>
-        <form id="search-icon" action="#search">
-            <input type="text" placeholder="Search" />
+        <form id="search-icon" action="../templates/search.html" onsubmit="">
+            <input id="searchbar" name="query-string" type="text" placeholder="Search" />
             <button id="search-button" action="/action_page.php" type="submit"><i class="fa fa-search"></i></button>
         </form>
         <a href="../templates/login.html">Login</a>
         <a href="../templates/registration.html">Register</a>
-        <a href="../templates/home-page.html">Home</a>
+        <a id ="active" href="../templates/home-page.html">Home</a>
     </div>
     <?php require ('../php/header.php'); ?>
     <div class="myslides">
@@ -38,42 +78,55 @@
             
     <div class="division">
         <div class="box">
-            <form action="../templates/listing-page.html">
+            <form action="../templates/listing-page.html#Vegetable">
             <div class="div-image">
                 <img src="../static/images/vegetables.jpg " alt="">
             </div>
             <div class="btn">
-                <button type="submit" action="../templates/listing-page.html">Vegetables</button>
+                <button type="submit" >Vegetables</button>
             </div>
         </div>
         </form>
         <div class="box">
+            <form action="../templates/listing-page.html#Fruit">
             <div class="div-image">
                 <img src="../static/images/fruits.jpg ">
             </div>
             <div class="btn">
                 <button type="submit">Fruits</button>
             </div>
+            </form>
         </div>
         <div class="box">
+            <form action="../templates/listing-page.html#Dairy">
             <div class="div-image">
                 <img src="../static/images/diary.jpg ">
             </div>
             <div class="btn">
-                <button type="submit">Diary</button>
+                <button type="submit">Dairy</button>
             </div>
+            </form>
         </div>
         <div class="box">
+            <form action="../templates/listing-page.html#Other-product">
             <div class="div-image">
-                <img src="../static/images/products.jpg ">
+                <img src="../static/images/oil-product.jpg">
             </div>
             <div class="btn">
                 <button type="submit">Other</button>
             </div>
+            </form>
         </div>
     </div>
     <br><br>
-    <script>
+    <div id="bottom" >
+        <span id ="title">Quick Links :</span>&nbsp;&nbsp;&nbsp;
+            <a href="../templates/add-product.html" class="farmer-only"><span class="fa fa-tags , item"></span> Add Products </a>&nbsp;&nbsp;
+            <a href="../templates/stock-page.html" class="farmer-only"><span class="fa fa-line-chart , item"></span> Review Stocks </a>&nbsp;&nbsp;
+            <a href="../templates/orders-page.html" ><span class="fa fa-shopping-basket , item"></span> View Orders </a>
+    </div>
+    
+    <script type="text/javascript" language="javascript">
         var slideIndex = 0;
         showSlides();
         function showSlides() {
@@ -87,6 +140,24 @@
             slides[slideIndex - 1].style.display = "block";
             setTimeout(showSlides, 2000); // Change image every 2 seconds
         }
+
+        var type = "<?php echo $_SESSION['usertype']; ?>".toString();
+        if (type == "farmer"){
+        x=document.getElementsByClassName("farmer-only");
+        for(var j=0;j<x.length;j++){
+        x[j].style.display="inline-block";
+        }
+        }
+
+
+
+      
+
+
+
+
+       
+
     </script>
 </body>
 
