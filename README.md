@@ -1,4 +1,6 @@
 # Vendakka-Local
-DBMS mini project
+
+Vendakka
+ -An e commerce web application
 ![](readimage.jpg)
 
